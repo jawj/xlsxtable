@@ -5,6 +5,11 @@
   xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"
   xmlns:x16r2="http://schemas.microsoft.com/office/spreadsheetml/2015/02/main"
   xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision">
+  <numFmts count="3">
+    <numFmt numFmtId="164" formatCode="yyyy\-mm\-dd\ hh:mm:ss" />
+    <numFmt numFmtId="165" formatCode="yyyy\-mm\-dd" />
+    <numFmt numFmtId="166" formatCode="h:mm:ss" />
+  </numFmts>
   <fonts count="2" x14ac:knownFonts="1">
     <font>
       <sz val="14" />
@@ -22,15 +27,12 @@
       <scheme val="minor" />
     </font>
   </fonts>
-  <fills count="2">
+  <fills count="1">
     <fill>
       <patternFill patternType="none" />
     </fill>
-    <fill>
-      <patternFill patternType="gray125" />
-    </fill>
   </fills>
-  <borders count="1">
+  <borders count="2">
     <border>
       <left />
       <right />
@@ -38,13 +40,25 @@
       <bottom />
       <diagonal />
     </border>
+    <border>
+      <left />
+      <right />
+      <top />
+      <bottom style="medium">
+        <color indexed="64" />
+      </bottom>
+      <diagonal />
+    </border>
   </borders>
   <cellStyleXfs count="1">
     <xf numFmtId="0" fontId="0" fillId="0" borderId="0" />
   </cellStyleXfs>
-  <cellXfs count="2">
-    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" />
-    <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" />
+  <cellXfs count="4">
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment wrapText="true" /></xf>
+    <xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" />
+    <xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" />
+    <xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" />
+    <xf numFmtId="166" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" />
   </cellXfs>
   <cellStyles count="1">
     <cellStyle name="Normal" xfId="0" builtinId="0" />

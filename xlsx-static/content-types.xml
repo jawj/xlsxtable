@@ -10,6 +10,8 @@
     ContentType="application/vnd.openxmlformats-officedocument.theme+xml" />
   <Override PartName="/xl/styles.xml"
     ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml" />
+  <Override PartName="/xl/sharedStrings.xml"
+    ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml" />
   <Override PartName="/docProps/core.xml"
     ContentType="application/vnd.openxmlformats-package.core-properties+xml" />
   <Override PartName="/docProps/app.xml"
