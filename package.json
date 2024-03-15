@@ -16,8 +16,7 @@
   "author": "George MacKerron",
   "license": "MIT",
   "dependencies": {
-    "littlezip": "^0.1.3",
-    "zipcelx": "^1.6.2"
+    "littlezip": "^0.1.3"
   },
   "devDependencies": {
     "esbuild": "^0.20.1",
