@@ -6,7 +6,7 @@ import appxml from './xlsx-dynamic/appxml';
 import corexml from './xlsx-dynamic/corexml';
 import workbookxml from './xlsx-dynamic/workbookxml';
 
-export enum XlsxDataTypes {
+export enum XlsxTypes {
   Number,
   String,
   DateTime,
@@ -16,7 +16,7 @@ export enum XlsxDataTypes {
 
 interface XlsxConfig {
   headings: string[];
-  types: XlsxDataTypes[];
+  types: XlsxTypes[];
   data: any[][];
   freeze: boolean;
   autoFilter: boolean;
@@ -28,15 +28,15 @@ interface XlsxConfig {
 }
 
 const timeTypes = {
-  [XlsxDataTypes.Time]: true,
-  [XlsxDataTypes.Date]: true,
-  [XlsxDataTypes.DateTime]: true,
+  [XlsxTypes.Time]: true,
+  [XlsxTypes.Date]: true,
+  [XlsxTypes.DateTime]: true,
 };
 
 const typeWidths = {  // these include padWidth
-  [XlsxDataTypes.Time]: 10,
-  [XlsxDataTypes.Date]: 12,
-  [XlsxDataTypes.DateTime]: 20,
+  [XlsxTypes.Time]: 10,
+  [XlsxTypes.Date]: 12,
+  [XlsxTypes.DateTime]: 20,
 }
 
 const minColWidth = 6; // includes padWidth
@@ -84,7 +84,7 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
     }
 
     // for a string column, check max line length within all strings
-    if (type === XlsxDataTypes.String) {
+    if (type === XlsxTypes.String) {
       let longestLineLength = 0;
       for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
         const cell = data[rowIndex][colIndex];
@@ -105,7 +105,7 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
       if (colWidths[colIndex] < colWidth) colWidths[colIndex] = colWidth > maxColWidth ? maxColWidth : colWidth;
 
     // check max number length
-    } else if (type === XlsxDataTypes.Number) {
+    } else if (type === XlsxTypes.Number) {
       let longestNumLength = 0;
       for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
         const numLength = data[rowIndex][colIndex].length;
@@ -118,7 +118,7 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
   }
 
   const colsXml = `<cols>${colWidths.map(
-    (colWidth, colIndex) => `<col min="${colIndex + 1}" max="${colIndex + 1}" width="${colWidth}" bestFit="1" customWidth="1" />`).join('')
+    (colWidth, colIndex) => `<col min="${colIndex + 1}" max="${colIndex + 1}" width="${Math.ceil(colWidth)}" bestFit="1" customWidth="1" />`).join('')
     }</cols>`;
 
   // currently we deal with headings separately, as inline strings
@@ -134,12 +134,12 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
       if (type in timeTypes) {
         const originalCell = cell;
 
-        if (type === XlsxDataTypes.Time) {
+        if (type === XlsxTypes.Time) {
           styleIndex = 4;
           const [h, m, s] = cell.split(':').map((x: string) => +x);
           cell = new Date(Date.UTC(1900, 0, 1, h, m, s));
 
-        } else if (type === XlsxDataTypes.Date) {
+        } else if (type === XlsxTypes.Date) {
           styleIndex = 3;
           const [y, m, d] = cell.split('-').map((x: string) => +x);
           cell = new Date(Date.UTC(y, m - 1, d));
@@ -151,10 +151,10 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
 
         // for dates before 1 Jan 1900, we fall back to a string representation
         cell = excelDate(cell) ?? originalCell;
-        if (typeof cell === 'string') type = XlsxDataTypes.String;
+        if (typeof cell === 'string') type = XlsxTypes.String;
       }
 
-      if (type === XlsxDataTypes.String) {
+      if (type === XlsxTypes.String) {
         totalStringCount++;
         let stringIndex = sharedStrings.get(cell);
         if (stringIndex === undefined) {

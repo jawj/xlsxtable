@@ -1,4 +1,4 @@
-import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"},p=a=>a.replace(/[<>&'"]/g,s=>Y[s]),z=a=>{let s="";for(;;){let m=a%26;if(s=String.fromCharCode(65+m)+s,a=(a-m)/26-1,a<0)return s}},C=(a,s)=>`${z(a)}${s+1}`,_=Date.UTC(1899,11,31)/1e3/3600/24,B=a=>{let s=a.getTime()/1e3/3600/24-_;if(!(s<1))return s>=60&&(s+=1),s};var D=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"},p=a=>a.replace(/[<>&'"]/g,s=>Y[s]),z=a=>{let s="";for(;;){let m=a%26;if(s=String.fromCharCode(65+m)+s,a=(a-m)/26-1,a<0)return s}},C=(a,s)=>`${z(a)}${s+1}`,_=Date.UTC(1899,11,31)/1e3/3600/24,B=a=>{let s=a.getTime()/1e3/3600/24-_;if(!(s<1))return s>=60&&(s+=1),s};var k=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />
   <Default Extension="xml" ContentType="application/xml" />
@@ -16,7 +16,7 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
     ContentType="application/vnd.openxmlformats-package.core-properties+xml" />
   <Override PartName="/docProps/app.xml"
     ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml" />
-</Types>`;var k=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+</Types>`;var w=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId3"
     Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"
@@ -27,7 +27,7 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
   <Relationship Id="rId1"
     Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"
     Target="xl/workbook.xml" />
-</Relationships>`;var w=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+</Relationships>`;var D=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Office Theme">
   <a:themeElements>
     <a:clrScheme name="Office">
@@ -437,7 +437,7 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
   </sheets>
   <calcPr calcId="181029" />
 </workbook>`;var oe=(i=>(i[i.Number=0]="Number",i[i.String=1]="String",i[i.DateTime=2]="DateTime",i[i.Date=3]="Date",i[i.Time=4]="Time",i))(oe||{}),re={4:!0,3:!0,2:!0},le={4:10,3:12,2:20},W=6,h=42,v=2,E=1.1,ne=Math.ceil(h/E)-v,ie=h-v,Pe=({headings:a,types:s,data:m,creator:b,title:T,description:i,sheetName:H,company:V,freeze:$,autoFilter:P})=>{let y=a.length;if(y!==s.length||y!==m[0].length)throw new Error("Number of headings, types and data columns must match");let S=m.length,j=new Date,F=new Map,N=0,I=0,d=[],G=v+(P?2:0);for(let e=0;e<y;e++){let t=a[e].length*E+G;d[e]=t<W?W:t>h?h:t}for(let e=0;e<y;e++){if(d[e]>=h)continue;let o=s[e],t=le[o];if(t!==void 0){d[e]<t&&(d[e]=t);continue}if(o===1){let r=0;for(let n=0;n<S;n++){let c=m[n][e],g=-1,f,x=c.length;for(;;){f=c.indexOf(`
-`,g+1),f===-1&&(f=x);let u=f-g;if(u>r&&(r=u),f===x)break;g=f}if(r>=ne)break}let l=r*E+v;d[e]<l&&(d[e]=l>h?h:l)}else if(o===0){let r=0;for(let n=0;n<S;n++){let c=m[n][e].length;if(c>r&&(r=c),r>=ie)break}let l=r+v;d[e]<l&&(d[e]=l>h?h:l)}}let J=`<cols>${d.map((e,o)=>`<col min="${o+1}" max="${o+1}" width="${e}" bestFit="1" customWidth="1" />`).join("")}</cols>`,K=`<row r="1" spans="1:${y}">${a.map((e,o)=>`<c r="${C(o,0)}" t="inlineStr" s="1"><is><t>${p(e)}</t></is></c>`).join("")}</row>`,q=`${m.map((e,o)=>`<row r="${o+2}" spans="1:${y}">${e.map((t,r)=>{let l=s[r],n;if(l in re){let c=t;if(l===4){n=4;let[g,f,x]=t.split(":").map(u=>+u);t=new Date(Date.UTC(1900,0,1,g,f,x))}else if(l===3){n=3;let[g,f,x]=t.split("-").map(u=>+u);t=new Date(Date.UTC(g,f-1,x))}else n=2,t=new Date(Date.parse(t));t=B(t)??c,typeof t=="string"&&(l=1)}if(l===1){N++;let c=F.get(t);return c===void 0&&(c=I,F.set(t,c),I++),`<c r="${C(r,o+1)}" t="s"><v>${c}</v></c>`}return`<c r="${C(r,o+1)}"${n?` s="${n}"`:""}><v>${t}</v></c>`}).join("")}</row>`).join("")}`,A=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+`,g+1),f===-1&&(f=x);let u=f-g;if(u>r&&(r=u),f===x)break;g=f}if(r>=ne)break}let l=r*E+v;d[e]<l&&(d[e]=l>h?h:l)}else if(o===0){let r=0;for(let n=0;n<S;n++){let c=m[n][e].length;if(c>r&&(r=c),r>=ie)break}let l=r+v;d[e]<l&&(d[e]=l>h?h:l)}}let J=`<cols>${d.map((e,o)=>`<col min="${o+1}" max="${o+1}" width="${Math.ceil(e)}" bestFit="1" customWidth="1" />`).join("")}</cols>`,K=`<row r="1" spans="1:${y}">${a.map((e,o)=>`<c r="${C(o,0)}" t="inlineStr" s="1"><is><t>${p(e)}</t></is></c>`).join("")}</row>`,q=`${m.map((e,o)=>`<row r="${o+2}" spans="1:${y}">${e.map((t,r)=>{let l=s[r],n;if(l in re){let c=t;if(l===4){n=4;let[g,f,x]=t.split(":").map(u=>+u);t=new Date(Date.UTC(1900,0,1,g,f,x))}else if(l===3){n=3;let[g,f,x]=t.split("-").map(u=>+u);t=new Date(Date.UTC(g,f-1,x))}else n=2,t=new Date(Date.parse(t));t=B(t)??c,typeof t=="string"&&(l=1)}if(l===1){N++;let c=F.get(t);return c===void 0&&(c=I,F.set(t,c),I++),`<c r="${C(r,o+1)}" t="s"><v>${c}</v></c>`}return`<c r="${C(r,o+1)}"${n?` s="${n}"`:""}><v>${t}</v></c>`}).join("")}</row>`).join("")}`,A=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="${N}" uniqueCount="${I}">
 ${[...F].map(([e])=>`<si><t>${p(e)}</t></si>`).join("")}
 </sst>`,U=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -462,4 +462,4 @@ ${q}
   </sheetData>
   ${P?`<autoFilter ref="A1:${C(y-1,0)}" xr:uid="{3${crypto.randomUUID()}}" />`:""}
   <pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3" />
-</worksheet>`;return console.log(A,U),se([{path:"[Content_Types].xml",data:D},{path:"_rels/.rels",data:k},{path:"xl/_rels/workbook.xml.rels",data:L},{path:"xl/workbook.xml",data:O({sheetName:H})},{path:"xl/styles.xml",data:M},{path:"xl/theme/theme1.xml",data:w},{path:"xl/sharedStrings.xml",data:A},{path:"xl/worksheets/sheet1.xml",data:U},{path:"docProps/core.xml",data:R({title:T,description:i,creator:b,creationDate:j})},{path:"docProps/app.xml",data:X({company:V})}])};export{oe as XlsxDataTypes,Pe as createXlsx};
+</worksheet>`;return console.log(A,U),se([{path:"[Content_Types].xml",data:k},{path:"_rels/.rels",data:w},{path:"xl/_rels/workbook.xml.rels",data:L},{path:"xl/workbook.xml",data:O({sheetName:H})},{path:"xl/styles.xml",data:M},{path:"xl/theme/theme1.xml",data:D},{path:"xl/sharedStrings.xml",data:A},{path:"xl/worksheets/sheet1.xml",data:U},{path:"docProps/core.xml",data:R({title:T,description:i,creator:b,creationDate:j})},{path:"docProps/app.xml",data:X({company:V})}])};export{oe as XlsxTypes,Pe as createXlsx};
