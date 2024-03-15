@@ -42,7 +42,7 @@ const typeWidths = {  // these include padWidth
 const minColWidth = 6; // includes padWidth
 const maxColWidth = 42;  // includes padWidth
 const padWidth = 2;
-const stringCharWidth = 1.6;
+const stringCharWidth = 1.1;  // all ms would be about 1.55, so this doesn't guarantee no wrapping
 const maxColStringChars = Math.ceil(maxColWidth / stringCharWidth) - padWidth;
 const maxColNumberChars = maxColWidth - padWidth;
 
@@ -59,8 +59,8 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
 
   const colWidths = [];
 
-  // start with heading lengths, clamped to min and max
-  const headingPadWidth = padWidth + (autoFilter ? 3 : 0);
+  // start with heading lengths, clamped to min and max (we assume no embedded newlines)
+  const headingPadWidth = padWidth + (autoFilter ? 2 : 0);
   for (let colIndex = 0; colIndex < cols; colIndex++) {
     const heading = headings[colIndex];
     const headingWidth = heading.length * stringCharWidth + headingPadWidth;
@@ -121,15 +121,19 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
     (colWidth, colIndex) => `<col min="${colIndex + 1}" max="${colIndex + 1}" width="${colWidth}" bestFit="1" customWidth="1" />`).join('')
     }</cols>`;
 
+  // currently we deal with headings separately, as inline strings
   const headingsXml = `<row r="1" spans="1:${cols}">${headings.map(
     (cell, colIndex) => `<c r="${cellRef(colIndex, 0)}" t="inlineStr" s="1"><is><t>${xmlesc(cell)}</t></is></c>`)
     .join('')}</row>`;
 
   const rowsXml = `${data.map((row, rowIndex) => `<row r="${rowIndex + 2}" spans="1:${cols}">${row.map(
     (cell, colIndex) => {
-      const type = types[colIndex];
+      let type = types[colIndex];
+
       let styleIndex;
       if (type in timeTypes) {
+        const originalCell = cell;
+
         if (type === XlsxDataTypes.Time) {
           styleIndex = 4;
           const [h, m, s] = cell.split(':').map((x: string) => +x);
@@ -137,16 +141,19 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
 
         } else if (type === XlsxDataTypes.Date) {
           styleIndex = 3;
-          cell = new Date(Date.parse(cell));
+          const [y, m, d] = cell.split('-').map((x: string) => +x);
+          cell = new Date(Date.UTC(y, m - 1, d));
 
-        } else {  // DateTime
+        } else {  // DateTime, which will end in +00 and thus be UTC
           styleIndex = 2;
           cell = new Date(Date.parse(cell));
         }
+
         // for dates before 1 Jan 1900, we fall back to a string representation
-        cell = excelDate(cell) ?? cell;
-        if (typeof cell === 'string') type === XlsxDataTypes.String;
+        cell = excelDate(cell) ?? originalCell;
+        if (typeof cell === 'string') type = XlsxDataTypes.String;
       }
+
       if (type === XlsxDataTypes.String) {
         totalStringCount++;
         let stringIndex = sharedStrings.get(cell);
@@ -156,8 +163,8 @@ export const createXlsx = ({ headings, types, data, creator, title, description,
           uniqueStringCount++;
         }
         return `<c r="${cellRef(colIndex, rowIndex + 1)}" t="s"><v>${stringIndex}</v></c>`;
-        // return `<c r="${cellRef(colIndex, rowIndex + 1)}" t="inlineStr"><is><t>${xmlesc(cell)}</t></is></c>`;
       }
+
       return `<c r="${cellRef(colIndex, rowIndex + 1)}"${styleIndex ? ` s="${styleIndex}"` : ''}><v>${cell}</v></c>`;
     }
   ).join('')}</row>`).join('')}`;

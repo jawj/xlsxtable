@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "buildCjs": "esbuild index.ts --bundle --format=cjs --minify --loader:.xml=text --outfile=index.js",
-    "buildEsm": "esbuild index.ts --bundle --format=esm --minify --loader:.xml=text --outfile=index.mjs",
+    "buildCjs": "esbuild index.ts --bundle --external:littlezip --format=cjs --minify --loader:.xml=text --outfile=index.js",
+    "buildEsm": "esbuild index.ts --bundle --external:littlezip --format=esm --minify --loader:.xml=text --outfile=index.mjs",
     "build": "npm run buildCjs && npm run buildEsm"
   },
   "keywords": [
