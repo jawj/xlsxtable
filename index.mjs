@@ -1,4 +1,4 @@
-import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"},p=a=>a.replace(/[<>&'"]/g,s=>Y[s]),z=a=>{let s="";for(;;){let m=a%26;if(s=String.fromCharCode(65+m)+s,a=(a-m)/26-1,a<0)return s}},C=(a,s)=>`${z(a)}${s+1}`,_=Date.UTC(1899,11,31)/1e3/3600/24,B=a=>{let s=a.getTime()/1e3/3600/24-_;if(!(s<1))return s>=60&&(s+=1),s};var k=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+import{createZip as se}from"littlezip";var z={"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"},p=t=>t.replace(/[<>&'"]/g,s=>z[s]),_=t=>{let s="";for(;;){let m=t%26;if(s=String.fromCharCode(65+m)+s,t=(t-m)/26-1,t<0)return s}},C=(t,s)=>`${_(t)}${s+1}`,Z=Date.UTC(1899,11,31)/1e3/3600/24,$=t=>{let s=t.getTime()/1e3/3600/24-Z;if(!(s<1))return s>=60&&(s+=1),s};var w=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />
   <Default Extension="xml" ContentType="application/xml" />
@@ -16,7 +16,7 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
     ContentType="application/vnd.openxmlformats-package.core-properties+xml" />
   <Override PartName="/docProps/app.xml"
     ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml" />
-</Types>`;var w=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+</Types>`;var k=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId3"
     Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"
@@ -322,6 +322,44 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
     </a:ext>
   </a:extLst>
 </a:theme>`;var M=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId4"
+    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings"
+    Target="sharedStrings.xml" />
+  <Relationship Id="rId3"
+    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"
+    Target="styles.xml" />
+  <Relationship Id="rId2"
+    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"
+    Target="theme/theme1.xml" />
+  <Relationship Id="rId1"
+    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"
+    Target="worksheets/sheet1.xml" />
+</Relationships>`;var P=({company:t})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">
+  <Company>${p(t)}</Company>
+</Properties>`;var N=({title:t,description:s,creator:m,creationDate:b})=>{let v=b.toISOString();return`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cp:coreProperties
+  xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dc:title>${p(t)}</dc:title>
+  <dc:description>${p(s)}</dc:description>
+  <dc:creator>${p(m)}</dc:creator>
+  <cp:lastModifiedBy>${p(m)}</cp:lastModifiedBy>
+  <dcterms:created xsi:type="dcterms:W3CDTF">${v}</dcterms:created>
+  <dcterms:modified xsi:type="dcterms:W3CDTF">${v}</dcterms:modified>
+</cp:coreProperties>`};var A=({sheetName:t})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <fileVersion appName="xl" lastEdited="7" lowestEdited="7" rupBuild="10211" />
+  <workbookPr defaultThemeVersion="166925" />
+  <sheets>
+    <sheet name="${p(t)}" sheetId="1" r:id="rId1" />
+  </sheets>
+  <calcPr calcId="181029" />
+</workbook>`;var U=({wrapText:t})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="x14ac x16r2 xr"
@@ -329,8 +367,8 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
   xmlns:x16r2="http://schemas.microsoft.com/office/spreadsheetml/2015/02/main"
   xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision">
   <numFmts count="3">
-    <numFmt numFmtId="164" formatCode="yyyy\\-mm\\-dd\\ hh:mm:ss" />
-    <numFmt numFmtId="165" formatCode="yyyy\\-mm\\-dd" />
+    <numFmt numFmtId="164" formatCode="yyyy-mm-dd hh:mm:ss" />
+    <numFmt numFmtId="165" formatCode="yyyy-mm-dd" />
     <numFmt numFmtId="166" formatCode="h:mm:ss" />
   </numFmts>
   <fonts count="2" x14ac:knownFonts="1">
@@ -377,7 +415,7 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
     <xf numFmtId="0" fontId="0" fillId="0" borderId="0" />
   </cellStyleXfs>
   <cellXfs count="4">
-    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment wrapText="true" /></xf>
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment wrapText="${t}" /></xf>
     <xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" />
     <xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" />
     <xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" />
@@ -398,49 +436,11 @@ import{createZip as se}from"littlezip";var Y={"<":"&lt;",">":"&gt;","&":"&amp;",
       <x15:timelineStyles defaultTimelineStyle="TimeSlicerStyleLight1" />
     </ext>
   </extLst>
-</styleSheet>`;var L=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId4"
-    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings"
-    Target="sharedStrings.xml" />
-  <Relationship Id="rId3"
-    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"
-    Target="styles.xml" />
-  <Relationship Id="rId2"
-    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"
-    Target="theme/theme1.xml" />
-  <Relationship Id="rId1"
-    Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"
-    Target="worksheets/sheet1.xml" />
-</Relationships>`;var X=({company:a})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">
-  <Company>${p(a)}</Company>
-</Properties>`;var R=({title:a,description:s,creator:m,creationDate:b})=>{let T=b.toISOString();return`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<cp:coreProperties
-  xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:dcterms="http://purl.org/dc/terms/"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <dc:title>${p(a)}</dc:title>
-  <dc:description>${p(s)}</dc:description>
-  <dc:creator>${p(m)}</dc:creator>
-  <cp:lastModifiedBy>${p(m)}</cp:lastModifiedBy>
-  <dcterms:created xsi:type="dcterms:W3CDTF">${T}</dcterms:created>
-  <dcterms:modified xsi:type="dcterms:W3CDTF">${T}</dcterms:modified>
-</cp:coreProperties>`};var O=({sheetName:a})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <fileVersion appName="xl" lastEdited="7" lowestEdited="7" rupBuild="10211" />
-  <workbookPr defaultThemeVersion="166925" />
-  <sheets>
-    <sheet name="${p(a)}" sheetId="1" r:id="rId1" />
-  </sheets>
-  <calcPr calcId="181029" />
-</workbook>`;var oe=(i=>(i[i.Number=0]="Number",i[i.String=1]="String",i[i.DateTime=2]="DateTime",i[i.Date=3]="Date",i[i.Time=4]="Time",i))(oe||{}),re={4:!0,3:!0,2:!0},le={4:10,3:12,2:20},W=6,h=42,v=2,E=1.1,ne=Math.ceil(h/E)-v,ie=h-v,Pe=({headings:a,types:s,data:m,creator:b,title:T,description:i,sheetName:H,company:V,freeze:$,autoFilter:P})=>{let y=a.length;if(y!==s.length||y!==m[0].length)throw new Error("Number of headings, types and data columns must match");let S=m.length,j=new Date,F=new Map,N=0,I=0,d=[],G=v+(P?2:0);for(let e=0;e<y;e++){let t=a[e].length*E+G;d[e]=t<W?W:t>h?h:t}for(let e=0;e<y;e++){if(d[e]>=h)continue;let o=s[e],t=le[o];if(t!==void 0){d[e]<t&&(d[e]=t);continue}if(o===1){let r=0;for(let n=0;n<S;n++){let c=m[n][e],g=-1,f,x=c.length;for(;;){f=c.indexOf(`
-`,g+1),f===-1&&(f=x);let u=f-g;if(u>r&&(r=u),f===x)break;g=f}if(r>=ne)break}let l=r*E+v;d[e]<l&&(d[e]=l>h?h:l)}else if(o===0){let r=0;for(let n=0;n<S;n++){let c=m[n][e].length;if(c>r&&(r=c),r>=ie)break}let l=r+v;d[e]<l&&(d[e]=l>h?h:l)}}let J=`<cols>${d.map((e,o)=>`<col min="${o+1}" max="${o+1}" width="${Math.ceil(e)}" bestFit="1" customWidth="1" />`).join("")}</cols>`,K=`<row r="1" spans="1:${y}">${a.map((e,o)=>`<c r="${C(o,0)}" t="inlineStr" s="1"><is><t>${p(e)}</t></is></c>`).join("")}</row>`,q=`${m.map((e,o)=>`<row r="${o+2}" spans="1:${y}">${e.map((t,r)=>{let l=s[r],n;if(l in re){let c=t;if(l===4){n=4;let[g,f,x]=t.split(":").map(u=>+u);t=new Date(Date.UTC(1900,0,1,g,f,x))}else if(l===3){n=3;let[g,f,x]=t.split("-").map(u=>+u);t=new Date(Date.UTC(g,f-1,x))}else n=2,t=new Date(Date.parse(t));t=B(t)??c,typeof t=="string"&&(l=1)}if(l===1){N++;let c=F.get(t);return c===void 0&&(c=I,F.set(t,c),I++),`<c r="${C(r,o+1)}" t="s"><v>${c}</v></c>`}return`<c r="${C(r,o+1)}"${n?` s="${n}"`:""}><v>${t}</v></c>`}).join("")}</row>`).join("")}`,A=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="${N}" uniqueCount="${I}">
+</styleSheet>`;var oe=(o=>(o[o.Number=0]="Number",o[o.String=1]="String",o[o.DateTime=2]="DateTime",o[o.Date=3]="Date",o[o.Time=4]="Time",o))(oe||{}),re={4:!0,3:!0,2:!0},le={4:10,3:12,2:20},B=6,h=42,T=2,L=1.1,ne=Math.ceil(h/L)-T,ie=h-T,Pe=({headings:t,types:s,data:m,wrapText:b,freeze:v,autoFilter:o,creator:X,title:R,description:O,sheetName:W,company:H})=>{let y=t.length;if(y!==s.length||y!==m[0].length)throw new Error("Number of headings, types and data columns must match");let S=m.length,V=new Date,F=new Map,E=0,I=0,d=[],j=T+(o?2:0);for(let e=0;e<y;e++){let a=t[e].length*L+j;d[e]=a<B?B:a>h?h:a}for(let e=0;e<y;e++){if(d[e]>=h)continue;let r=s[e],a=le[r];if(a!==void 0){d[e]<a&&(d[e]=a);continue}if(r===1){let l=0;for(let i=0;i<S;i++){let c=m[i][e],g=-1,f,x=c.length;for(;;){f=c.indexOf(`
+`,g+1),f===-1&&(f=x);let u=f-g;if(u>l&&(l=u),f===x)break;g=f}if(l>=ne)break}let n=l*L+T;d[e]<n&&(d[e]=n>h?h:n)}else if(r===0){let l=0;for(let i=0;i<S;i++){let c=m[i][e].length;if(c>l&&(l=c),l>=ie)break}let n=l+T;d[e]<n&&(d[e]=n>h?h:n)}}let G=`<cols>${d.map((e,r)=>`<col min="${r+1}" max="${r+1}" width="${Math.ceil(e)}" bestFit="1" customWidth="1" />`).join("")}</cols>`,J=`<row r="1" spans="1:${y}">${t.map((e,r)=>`<c r="${C(r,0)}" t="inlineStr" s="1"><is><t>${p(e)}</t></is></c>`).join("")}</row>`,K=`${m.map((e,r)=>`<row r="${r+2}" spans="1:${y}">${e.map((a,l)=>{let n=s[l],i;if(n in re){let c=a;if(n===4){i=4;let[g,f,x]=a.split(":").map(u=>+u);a=new Date(Date.UTC(1900,0,1,g,f,x))}else if(n===3){i=3;let[g,f,x]=a.split("-").map(u=>+u);a=new Date(Date.UTC(g,f-1,x))}else i=2,a=new Date(Date.parse(a));a=$(a)??c,typeof a=="string"&&(n=1)}if(n===1){E++;let c=F.get(a);return c===void 0&&(c=I,F.set(a,c),I++),`<c r="${C(l,r+1)}" t="s"><v>${c}</v></c>`}return`<c r="${C(l,r+1)}"${i?` s="${i}"`:""}><v>${a}</v></c>`}).join("")}</row>`).join("")}`,q=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="${E}" uniqueCount="${I}">
 ${[...F].map(([e])=>`<si><t>${p(e)}</t></si>`).join("")}
-</sst>`,U=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+</sst>`,Y=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet 
   xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -450,16 +450,16 @@ ${[...F].map(([e])=>`<si><t>${p(e)}</t></si>`).join("")}
   <dimension ref="A1:${C(y-1,S)}" />
   <sheetViews>
     <sheetView tabSelected="1" workbookViewId="0">
-      ${$?'<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen" />':""}
-      <selection${$?' pane="bottomLeft"':""} activeCell="A2" sqref="A2" />
+      ${v?'<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen" />':""}
+      <selection${v?' pane="bottomLeft"':""} activeCell="A2" sqref="A2" />
     </sheetView>
   </sheetViews>
   <sheetFormatPr baseColWidth="12" defaultRowHeight="16" />
-${J}
+${G}
   <sheetData>
+${J}
 ${K}
-${q}
   </sheetData>
-  ${P?`<autoFilter ref="A1:${C(y-1,0)}" xr:uid="{3${crypto.randomUUID()}}" />`:""}
+  ${o?`<autoFilter ref="A1:${C(y-1,0)}" xr:uid="{3${crypto.randomUUID()}}" />`:""}
   <pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3" />
-</worksheet>`;return console.log(A,U),se([{path:"[Content_Types].xml",data:k},{path:"_rels/.rels",data:w},{path:"xl/_rels/workbook.xml.rels",data:L},{path:"xl/workbook.xml",data:O({sheetName:H})},{path:"xl/styles.xml",data:M},{path:"xl/theme/theme1.xml",data:D},{path:"xl/sharedStrings.xml",data:A},{path:"xl/worksheets/sheet1.xml",data:U},{path:"docProps/core.xml",data:R({title:T,description:i,creator:b,creationDate:j})},{path:"docProps/app.xml",data:X({company:V})}])};export{oe as XlsxTypes,Pe as createXlsx};
+</worksheet>`;return se([{path:"[Content_Types].xml",data:w},{path:"_rels/.rels",data:k},{path:"xl/_rels/workbook.xml.rels",data:M},{path:"xl/workbook.xml",data:A({sheetName:W})},{path:"xl/styles.xml",data:U({wrapText:b})},{path:"xl/theme/theme1.xml",data:D},{path:"xl/sharedStrings.xml",data:q},{path:"xl/worksheets/sheet1.xml",data:Y},{path:"docProps/core.xml",data:N({title:R,description:O,creator:X,creationDate:V})},{path:"docProps/app.xml",data:P({company:H})}])};export{oe as XlsxTypes,Pe as createXlsx};

@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+
+export default ({ wrapText }: { wrapText: boolean }) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="x14ac x16r2 xr"
@@ -54,7 +56,7 @@
     <xf numFmtId="0" fontId="0" fillId="0" borderId="0" />
   </cellStyleXfs>
   <cellXfs count="4">
-    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment wrapText="true" /></xf>
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"><alignment wrapText="${wrapText}" /></xf>
     <xf numFmtId="0" fontId="1" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" />
     <xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" />
     <xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1" />
@@ -75,4 +77,4 @@
       <x15:timelineStyles defaultTimelineStyle="TimeSlicerStyleLight1" />
     </ext>
   </extLst>
-</styleSheet>
+</styleSheet>`;

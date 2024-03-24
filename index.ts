@@ -1,10 +1,12 @@
 
 import { createZip } from 'littlezip';
 import { xmlesc, cellRef, excelDate } from './utils';
-import { contentTypesXml, relsXml, theme1Xml, stylesXml, workbookXmlRels } from './xlsx-static';
-import appxml from './xlsx-dynamic/appxml';
-import corexml from './xlsx-dynamic/corexml';
-import workbookxml from './xlsx-dynamic/workbookxml';
+import { contentTypesXml, relsXml, theme1Xml, workbookXmlRels } from './xlsx-static';
+import appXml from './xlsx-dynamic/appxml';
+import coreXml from './xlsx-dynamic/corexml';
+import workbookXml from './xlsx-dynamic/workbookxml';
+import stylesXml from './xlsx-dynamic/stylesxml';
+
 
 export enum XlsxTypes {
   Number,
@@ -18,6 +20,7 @@ interface XlsxConfig {
   headings: string[];
   types: XlsxTypes[];
   data: any[][];
+  wrapText: boolean,
   freeze: boolean;
   autoFilter: boolean;
   sheetName: string;
@@ -42,11 +45,11 @@ const typeWidths = {  // these include padWidth
 const minColWidth = 6; // includes padWidth
 const maxColWidth = 42;  // includes padWidth
 const padWidth = 2;
-const stringCharWidth = 1.1;  // all ms would be about 1.55, so this doesn't guarantee no wrapping
+const stringCharWidth = 1.1;  // all 'm's would be about 1.55, so this doesn't guarantee no wrapping
 const maxColStringChars = Math.ceil(maxColWidth / stringCharWidth) - padWidth;
 const maxColNumberChars = maxColWidth - padWidth;
 
-export const createXlsx = ({ headings, types, data, creator, title, description, sheetName, company, freeze, autoFilter }: XlsxConfig) => {
+export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter, creator, title, description, sheetName, company }: XlsxConfig) => {
   const cols = headings.length;
   if (cols !== types.length || cols !== data[0].length) throw new Error('Number of headings, types and data columns must match');
 
@@ -198,17 +201,16 @@ ${rowsXml}
   <pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3" />
 </worksheet>`;
 
-  console.log(sharedStringsXml, sheetXml);
   return createZip([
     { path: '[Content_Types].xml', data: contentTypesXml },
     { path: '_rels/.rels', data: relsXml },
     { path: 'xl/_rels/workbook.xml.rels', data: workbookXmlRels },
-    { path: 'xl/workbook.xml', data: workbookxml({ sheetName }) },
-    { path: 'xl/styles.xml', data: stylesXml },
+    { path: 'xl/workbook.xml', data: workbookXml({ sheetName }) },
+    { path: 'xl/styles.xml', data: stylesXml({ wrapText }) },
     { path: 'xl/theme/theme1.xml', data: theme1Xml },
     { path: 'xl/sharedStrings.xml', data: sharedStringsXml },
     { path: 'xl/worksheets/sheet1.xml', data: sheetXml },
-    { path: 'docProps/core.xml', data: corexml({ title, description, creator, creationDate }) },
-    { path: 'docProps/app.xml', data: appxml({ company }) },
+    { path: 'docProps/core.xml', data: coreXml({ title, description, creator, creationDate }) },
+    { path: 'docProps/app.xml', data: appXml({ company }) },
   ]);
 };
