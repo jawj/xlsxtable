@@ -2,11 +2,22 @@
   "name": "xlsxy",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts",
+    "index.d.mts",
+    "README.md"
+  ],
+  "exports": {
+    "require": "./index.js",
+    "import": "./index.mjs"
+  },
   "scripts": {
+    "check": "tsc --noEmit",
     "buildCjs": "esbuild index.ts --bundle --external:littlezip --format=cjs --minify --loader:.xml=text --outfile=index.js",
     "buildEsm": "esbuild index.ts --bundle --external:littlezip --format=esm --minify --loader:.xml=text --outfile=index.mjs",
-    "build": "npm run buildCjs && npm run buildEsm"
+    "build": "npm run check && npm run buildCjs && npm run buildEsm && cp index.d.ts index.d.mts"
   },
   "keywords": [
     "xlsx",
@@ -21,5 +32,9 @@
   "devDependencies": {
     "esbuild": "^0.20.1",
     "typescript": "^5.4.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jawj/xlsxy"
   }
 }
