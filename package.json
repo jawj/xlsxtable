@@ -35,6 +35,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jawj/xlsxy"
+    "url": "git+https://github.com/jawj/xlsxy.git"
   }
 }
