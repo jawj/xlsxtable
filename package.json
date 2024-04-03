@@ -1,7 +1,7 @@
 {
   "name": "xlsxy",
   "version": "0.1.0",
-  "description": "",
+  "description": "Create nice Excel files from tabular data",
   "files": [
     "index.js",
     "index.mjs",
