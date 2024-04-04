@@ -1,5 +1,5 @@
 {
-  "name": "xlsxy",
+  "name": "xlsxtable",
   "version": "0.1.0",
   "description": "Create nice Excel files from tabular data",
   "files": [
@@ -35,6 +35,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jawj/xlsxy.git"
+    "url": "git+https://github.com/jawj/xlsxtable.git"
   }
 }

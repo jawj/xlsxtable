@@ -1,4 +1,4 @@
-# xlsxy
+# xlsxtable
 
 A small, simple library to create nice `.xlsx` Excel files from tabular data.
 
@@ -9,7 +9,7 @@ Only runtime dependency is [littlezip](https://github.com/jawj/littlezip) (which
 ## Example usage
 
 ```javascript
-import { createXlsx, XlsxTypes } from 'xlsxy';
+import { createXlsx, XlsxTypes } from 'xlsxtable';
 import { writeFileSync } from 'fs';
 
 createXlsx({
