@@ -21,4 +21,4 @@ export interface XlsxConfig {
   company: string;
 }
 
-export const createXlsx = (config: XlsxConfig) => Promise<Uint8Array>;
+export function createXlsx(config: XlsxConfig): Promise<Uint8Array>;
