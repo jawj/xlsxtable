@@ -1,5 +1,5 @@
 
-import { createZip } from 'littlezip';
+import { createZip } from 'littlezipper';
 import { xmlesc, cellRef, excelDate } from './utils';
 import { contentTypesXml, relsXml, theme1Xml, workbookXmlRels } from './xlsx-static';
 import appXml from './xlsx-dynamic/appxml';

@@ -1,10 +1,16 @@
 # xlsxtable
 
-A small, simple library to create nice `.xlsx` Excel files from tabular data.
+A small, simple library to create nice `.xlsx` Excel files from tabular data, which:
 
-Sets reasonable column widths. Bolds and (optionally) autofilters and freezes the headings.
+* Emboldens and (optionally) autofilters and freezes the headings
+* Sets reasonable column widths
+* Parses dates, times and datetimes to Excel format (roughly: floating-point days since 1 Jan 1900)
 
-Only runtime dependency is [littlezip](https://github.com/jawj/littlezip) (which has no runtime dependencies of its own).
+The only runtime dependency is [littlezipper](https://github.com/jawj/littlezipper) (which has no runtime dependencies of its own).
+
+## How to say _xlsxtable_
+
+Pronunciation is as close as possible to 'vegetable' or 'Whitstable'. That is: _ex-el-ess-EX-ta-bl_.
 
 ## Example usage
 
@@ -22,14 +28,14 @@ createXlsx({
     ['3', 'Chip', '1979-01-03', '2024-03-14 20:14:25.34486+00'],
   ],
   // options
-  freeze: true,       // freeze the top/header row
-  autoFilter: true,   // enable autofilter for headers
-  wrapText: true,     // wrap long text cells
+  sheetName: 'Sheet 1',  // shown on the tab at the bottom
+  freeze: true,          // freeze the top/header row
+  autoFilter: true,      // enable autofilter for headers
+  wrapText: true,        // wrap long text cells
   // metadata
   creator: 'Diane', 
   title: 'Blughupsnitch data',
   description: 'Data about the blughupsnitch',
-  sheetName: 'Sheet 1', 
   company: 'Dogoodnever Inc.',
 })
   .then(xlsx => writeFileSync('/path/to/my.xlsx', xlsx));
