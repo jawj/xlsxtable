@@ -14,6 +14,8 @@ Pronunciation is as close as possible to 'vegetable' or 'Whitstable'. That is: _
 
 ## Example usage
 
+All cell values passed to the library must be strings. Any non-string values will be ignored.
+
 ```javascript
 import { createXlsx, XlsxTypes } from 'xlsxtable';
 import { writeFileSync } from 'fs';

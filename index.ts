@@ -91,6 +91,7 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
       let longestLineLength = 0;
       for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
         const cell = data[rowIndex][colIndex];
+        if (typeof cell !== 'string') continue;
         let lastNewlineIndex = -1;
         let newlineIndex;
         let cellChars = cell.length;
@@ -111,7 +112,9 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
     } else if (type === XlsxTypes.Number) {
       let longestNumLength = 0;
       for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
-        const numLength = data[rowIndex][colIndex].length;
+        const cell = data[rowIndex][colIndex];
+        if (typeof cell !== 'string') continue;
+        const numLength = cell.length;
         if (numLength > longestNumLength) longestNumLength = numLength;
         if (longestNumLength >= maxColNumberChars) break;
       }
@@ -131,6 +134,7 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
 
   const rowsXml = `${data.map((row, rowIndex) => `<row r="${rowIndex + 2}" spans="1:${cols}">${row.map(
     (cell, colIndex) => {
+      if (typeof cell !== 'string') return '';
       let type = types[colIndex];
 
       let styleIndex;
