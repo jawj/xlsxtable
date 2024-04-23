@@ -7,7 +7,6 @@ import coreXml from './xlsx-dynamic/corexml';
 import workbookXml from './xlsx-dynamic/workbookxml';
 import stylesXml from './xlsx-dynamic/stylesxml';
 
-
 export enum XlsxTypes {
   Number,
   String,
@@ -90,8 +89,9 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
     if (type === XlsxTypes.String) {
       let longestLineLength = 0;
       for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
-        const cell = data[rowIndex][colIndex];
-        if (typeof cell !== 'string') continue;
+        let cell = data[rowIndex][colIndex];
+        if (cell == null /* or undefined */) continue;
+        cell = String(cell);
         let lastNewlineIndex = -1;
         let newlineIndex;
         let cellChars = cell.length;
@@ -108,12 +108,13 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
       const colWidth = longestLineLength * stringCharWidth + padWidth;
       if (colWidths[colIndex] < colWidth) colWidths[colIndex] = colWidth > maxColWidth ? maxColWidth : colWidth;
 
-    // check max number length
+      // check max number length
     } else if (type === XlsxTypes.Number) {
       let longestNumLength = 0;
       for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
-        const cell = data[rowIndex][colIndex];
-        if (typeof cell !== 'string') continue;
+        let cell = data[rowIndex][colIndex];
+        if (cell == null /* or undefined */) continue;
+        cell = String(cell);
         const numLength = cell.length;
         if (numLength > longestNumLength) longestNumLength = numLength;
         if (longestNumLength >= maxColNumberChars) break;
@@ -134,30 +135,18 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
 
   const rowsXml = `${data.map((row, rowIndex) => `<row r="${rowIndex + 2}" spans="1:${cols}">${row.map(
     (cell, colIndex) => {
-      if (typeof cell !== 'string') return '';
+      if (cell == null /* or undefined */) return '';
       let type = types[colIndex];
 
       let styleIndex;
       if (type in timeTypes) {
-        const originalCell = cell;
-
-        if (type === XlsxTypes.Time) {
-          styleIndex = 4;
-          const [h, m, s] = cell.split(':').map((x: string) => +x);
-          cell = new Date(Date.UTC(1900, 0, 1, h, m, s));
-
-        } else if (type === XlsxTypes.Date) {
-          styleIndex = 3;
-          const [y, m, d] = cell.split('-').map((x: string) => +x);
-          cell = new Date(Date.UTC(y, m - 1, d));
-
-        } else {  // DateTime, which will end in +00 and thus be UTC
-          styleIndex = 2;
-          cell = new Date(Date.parse(cell));
-        }
+        styleIndex =
+          type === XlsxTypes.Time ? 4 :
+            type === XlsxTypes.Date ? 3 :
+              2;
 
         // for dates before 1 Jan 1900, we fall back to a string representation
-        cell = excelDate(cell) ?? originalCell;
+        cell = excelDate(cell) ?? cell;
         if (typeof cell === 'string') type = XlsxTypes.String;
       }
 
