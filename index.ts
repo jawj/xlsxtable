@@ -8,11 +8,15 @@ import workbookXml from './xlsx-dynamic/workbookxml';
 import stylesXml from './xlsx-dynamic/stylesxml';
 
 export enum XlsxTypes {
+  // note: owing to the logic used below, the order of these enum types must not be changed
   Number,
   String,
-  DateTime,
-  Date,
-  Time,
+  LocalDate,
+  LocalTime,
+  LocalDateTime,
+  UTCDate,
+  UTCTime,
+  UTCDateTime,
 }
 
 interface XlsxConfig {
@@ -29,16 +33,13 @@ interface XlsxConfig {
   company: string;
 }
 
-const timeTypes = {
-  [XlsxTypes.Time]: true,
-  [XlsxTypes.Date]: true,
-  [XlsxTypes.DateTime]: true,
-};
-
 const typeWidths = {  // these include padWidth
-  [XlsxTypes.Time]: 10,
-  [XlsxTypes.Date]: 12,
-  [XlsxTypes.DateTime]: 20,
+  [XlsxTypes.UTCDate]: 12,
+  [XlsxTypes.UTCTime]: 10,
+  [XlsxTypes.UTCDateTime]: 20,
+  [XlsxTypes.LocalDate]: 12,
+  [XlsxTypes.LocalTime]: 10,
+  [XlsxTypes.LocalDateTime]: 20,
 }
 
 const minColWidth = 6; // includes padWidth
@@ -137,15 +138,18 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
     (cell, colIndex) => {
       if (cell == null /* or undefined */) return '';
       let type = types[colIndex];
+      const isDateOrTime = type >= XlsxTypes.LocalDate;
 
       let styleIndex;
-      if (type in timeTypes) {
-        styleIndex = type === XlsxTypes.Time ? 4 : type === XlsxTypes.Date ? 3 : 2;
+      if (isDateOrTime) {
+        const isTime = type === XlsxTypes.UTCTime || type === XlsxTypes.LocalTime;
+        const isDate = type === XlsxTypes.UTCDate || type === XlsxTypes.LocalDate;
+        const isUTC = type >= XlsxTypes.UTCDate;
 
-        if (cell instanceof Date) {
-          if (type === XlsxTypes.Time) cell.setUTCFullYear(1899, 11, 31);  // Excel natively uses day zero for time-only values
-          cell = excelDate(cell, type === XlsxTypes.Time) ?? cell.toISOString();  // for invalid dates, fall back to a string
-        }
+        styleIndex = isTime ? 4 : isDate ? 3 : 2;
+
+        if (cell instanceof Date) cell = excelDate(cell, isUTC, isTime)
+          ?? cell.toISOString();  // for invalid dates, fall back to a string
         
         if (typeof cell === 'string') type = XlsxTypes.String;
       }
