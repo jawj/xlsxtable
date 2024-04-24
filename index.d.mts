@@ -2,9 +2,12 @@
 export enum XlsxTypes {
   Number,
   String,
-  DateTime,
-  Date,
-  Time,
+  LocalDate,
+  LocalTime,
+  LocalDateTime,
+  UTCDate,
+  UTCTime,
+  UTCDateTime,
 }
 
 export interface XlsxConfig {
