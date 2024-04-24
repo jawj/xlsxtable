@@ -16,7 +16,7 @@ Pronunciation is as close as possible to 'vegetable' or 'Whitstable'. That is: _
 
 * `XlsxTypes.String` values will be coerced to `string`.
 * `XlsxTypes.Number` values must be provided as `number` or `string`.
-* `XlsxTypes.Date`, `XlsxTypes.Time` and `XlsxTypes.DateTime` values should be provided as `Date` objects, or `string` as a fallback (e.g. if the date is infinite or otherwise unsupported).
+* `XlsxTypes.Date`, `XlsxTypes.Time` and `XlsxTypes.DateTime` values should be provided as `Date` objects, with `string` as a fallback (e.g. if the date is infinite or otherwise unsupported).
 * `null` or `undefined` values result in an empty cell for all `XlsxTypes`.
 
 ## Example usage
