@@ -146,7 +146,7 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
               2;
 
         // for dates before 1 Jan 1900, we fall back to a string representation
-        cell = excelDate(cell) ?? cell;
+        if (cell instanceof Date) cell = excelDate(cell) ?? cell;
         if (typeof cell === 'string') type = XlsxTypes.String;
       }
 
