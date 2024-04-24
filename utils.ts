@@ -13,8 +13,10 @@ export const colRef = (colIndex: number) => {  // colIndex starts at zero
 export const cellRef = (colIndex: number, rowIndex: number) => `${colRef(colIndex)}${rowIndex + 1}`;  // colIndex, rowIndex both start at zero
 
 const excelEpoch = Date.UTC(1899, 11, 31) / 1000 / 3600 / 24;  // Excel considers 1 Jan 1900 as day 1, so 31 Dec 1899 is day 0
-export const excelDate = (date: Date, allow0Jan1900 = false) => {
-  let days = date.getTime() / 1000 / 3600 / 24 - excelEpoch;
+export const excelDate = (d: Date, allow0Jan1900 = false) => {
+  // to match the provided date in local time, convert to a UTC date with the same wall clock date/time
+  let utcDate = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
+  let days = utcDate / 1000 / 3600 / 24 - excelEpoch;
   if (days < 0) return undefined;
   if (days < 1 && !allow0Jan1900) return undefined;  // Excel allows day zero for a time without a date
   if (days >= 60) days += 1;  // Excel wrongly considers 1900 a leap year: http://www.cpearson.com/excel/datetime.htm
