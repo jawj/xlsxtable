@@ -1,6 +1,6 @@
 {
   "name": "xlsxtable",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create nice Excel files from tabular data",
   "files": [
     "index.js",
