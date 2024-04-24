@@ -16,7 +16,7 @@ Pronunciation is as close as possible to 'vegetable' or 'Whitstable'. That is: _
 
 * `XlsxTypes.String` values will be coerced to `string`.
 * `XlsxTypes.Number` values must be provided as `number` or `string`.
-* `XlsxTypes.Date`, `XlsxTypes.Time` and `XlsxTypes.DateTime` values should be provided as `Date` objects, with `string` as a fallback (e.g. if the date is infinite or otherwise unsupported).
+* `XlsxTypes.LocalDate`/`XlsxTypes.UTCDate`, `XlsxTypes.LocalTime`/`XlsxTypes.UTCTime` and `XlsxTypes.LocalDateTime`/`XlsxTypes.UTCDateTime` values should be provided as `Date` objects, with `string` as a fallback (e.g. if the date is infinite or otherwise unsupported).
 * `null` or `undefined` values result in an empty cell for all `XlsxTypes`.
 
 ## Example usage
@@ -30,7 +30,7 @@ const now = new Date();
 createXlsx({
   // sheet data
   headings: ['id', 'name', 'dob', 'lastUpdated'],
-  types: [XlsxTypes.Number, XlsxTypes.String, XlsxTypes.Date, XlsxTypes.DateTime],
+  types: [XlsxTypes.Number, XlsxTypes.String, XlsxTypes.LocalDate, XlsxTypes.LocalDateTime],
   data: [
     [1, 'Anna', new Date('1979-01-01'), now],
     [2, 'Bryn', new Date('1979-01-02'), now],
