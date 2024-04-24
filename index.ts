@@ -140,14 +140,13 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
 
       let styleIndex;
       if (type in timeTypes) {
-        styleIndex =
-          type === XlsxTypes.Time ? 4 :
-            type === XlsxTypes.Date ? 3 : 2;
+        styleIndex = type === XlsxTypes.Time ? 4 : type === XlsxTypes.Date ? 3 : 2;
 
         if (cell instanceof Date) {
           if (type === XlsxTypes.Time) cell.setUTCFullYear(1899, 11, 31);  // Excel natively uses day zero for time-only values
           cell = excelDate(cell, type === XlsxTypes.Time) ?? cell.toISOString();  // for invalid dates, fall back to a string
         }
+        
         if (typeof cell === 'string') type = XlsxTypes.String;
       }
 
