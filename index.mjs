@@ -1,4 +1,4 @@
-var W,se=()=>{let a=Int32Array,s=new a(256),m=new a(4096),o,l,n;for(l=0;l<256;l++)o=l,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,m[l]=s[l]=o&1?-306674912^o>>>1:o>>>1;for(l=0;l<256;l++)for(n=s[l],o=256+l;o<4096;o+=256)n=m[o]=n>>>8^s[n&255];for(W=[s],l=1;l<16;l++)W[l]=m.subarray(l*256,(l+1)*256)},re=(a,s=0)=>{W||se();let[m,o,l,n,E,$,A,P,w,C,L,t,e,k,f,h]=W,x=s^-1,v=a.length-15,i=0;for(;i<v;)x=h[a[i++]^x&255]^f[a[i++]^x>>8&255]^k[a[i++]^x>>16&255]^e[a[i++]^x>>>24]^t[a[i++]]^L[a[i++]]^C[a[i++]]^w[a[i++]]^P[a[i++]]^A[a[i++]]^$[a[i++]]^E[a[i++]]^n[a[i++]]^l[a[i++]]^o[a[i++]]^m[a[i++]];for(v+=15;i<v;)x=x>>>8^m[(x^a[i++])&255];return~x},le=typeof CompressionStream<"u",z=new TextEncoder,Y=a=>a.reduce((s,m)=>s+m.length,0),q=Uint8Array;function ne(a){let s=new CompressionStream("gzip"),m=s.writable.getWriter(),o=s.readable.getReader();return m.write(a),m.close(),()=>o.read()}async function Z(a,s=!0,m=ne){let o=[],l=le&&s,n=a.length,E=a.map(f=>z.encode(f.path)),$=a.map(({data:f})=>typeof f=="string"?z.encode(f):f instanceof ArrayBuffer?new q(f):f),A=Y($),P=Y(E),w=n*46+P,C=A+n*30+P+w+22,L=new Date,t=new q(C),e=0;for(let f=0;f<n;f++){o[f]=e;let h=E[f],x=h.length,v=$[f],i=v.length,D=a[f].lastModified??L,X=(D.getSeconds()/2|0)+(D.getMinutes()<<5)+(D.getHours()<<11),R=D.getDate()+(D.getMonth()+1<<5)+(D.getFullYear()-1980<<9),r=0,y=!1;t[e++]=80,t[e++]=75,t[e++]=3,t[e++]=4,t[e++]=20,t[e++]=0,t[e++]=0,t[e++]=8;let g=e;t[e++]=t[e++]=0,t[e++]=X&255,t[e++]=X>>8,t[e++]=R&255,t[e++]=R>>8;let p=e;if(e+=8,t[e++]=i&255,t[e++]=i>>8&255,t[e++]=i>>16&255,t[e++]=i>>24,t[e++]=x&255,t[e++]=x>>8,t[e++]=t[e++]=0,t.set(h,e),e+=x,l){let d=e,u=m(v),c,b=0,S=0;e:{for(;;){let F=await u();if(F.done)throw new Error("Bad gzip data");if(c=F.value,b=S,S=b+c.length,b<=3&&S>3&&c[3-b]&30){y=!0;break e}if(S>=10){c=c.subarray(10-b);break}}for(;;){let F=e-d,M=c.length;if(F+M>=i+8){y=!0;break e}t.set(c,e),e+=M;let O=await u();if(O.done)break;c=O.value}}if(y)for(;;){let F=c.length,M=8-F,O=e;e=d;for(let B=0;B<8;B++)t[e++]=B<M?t[O-M+B]:c[F-8+B];let K=await u();if(K.done)break;c=K.value}e-=8,t[p++]=t[e++],t[p++]=t[e++],t[p++]=t[e++],t[p++]=t[e++],e-=4,y||(t[g]=8,r=e-d)}if((!l||y)&&(t.set(v,e),e+=i,r=i),!l){let d=re(v);t[p++]=d&255,t[p++]=d>>8&255,t[p++]=d>>16&255,t[p++]=d>>24}t[p++]=r&255,t[p++]=r>>8&255,t[p++]=r>>16&255,t[p++]=r>>24}let k=e;for(let f=0;f<n;f++){let h=o[f],x=E[f],v=x.length;t[e++]=80,t[e++]=75,t[e++]=1,t[e++]=2,t[e++]=20,t[e++]=0,t[e++]=20,t[e++]=0,t.set(t.subarray(h+6,h+30),e),e+=24,t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=0,t[e++]=h&255,t[e++]=h>>8&255,t[e++]=h>>16&255,t[e++]=h>>24,t.set(x,e),e+=v}return t[e++]=80,t[e++]=75,t[e++]=5,t[e++]=6,t[e++]=t[e++]=t[e++]=t[e++]=0,t[e++]=n&255,t[e++]=n>>8,t[e++]=n&255,t[e++]=n>>8,t[e++]=w&255,t[e++]=w>>8&255,t[e++]=w>>16&255,t[e++]=w>>24,t[e++]=k&255,t[e++]=k>>8&255,t[e++]=k>>16&255,t[e++]=k>>24,t[e++]=t[e++]=0,t.subarray(0,e)}var ie={"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"},T=a=>a.replace(/[<>&'"]/g,s=>ie[s]),ce=a=>{let s="";for(;;){let m=a%26;if(s=String.fromCharCode(65+m)+s,a=(a-m)/26-1,a<0)return s}},N=(a,s)=>`${ce(a)}${s+1}`,pe=Date.UTC(1899,11,31)/1e3/3600/24,_=a=>{let s=a.getTime()/1e3/3600/24-pe;if(!(s<1))return s>=60&&(s+=1),s};var H=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+var W,se=()=>{let a=Int32Array,l=new a(256),r=new a(4096),o,n,i;for(n=0;n<256;n++)o=n,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,o=o&1?-306674912^o>>>1:o>>>1,r[n]=l[n]=o&1?-306674912^o>>>1:o>>>1;for(n=0;n<256;n++)for(i=l[n],o=256+n;o<4096;o+=256)i=r[o]=i>>>8^l[i&255];for(W=[l],n=1;n<16;n++)W[n]=r.subarray(n*256,(n+1)*256)},re=(a,l=0)=>{W||se();let[r,o,n,i,E,$,A,P,w,C,L,t,e,k,f,h]=W,x=l^-1,v=a.length-15,c=0;for(;c<v;)x=h[a[c++]^x&255]^f[a[c++]^x>>8&255]^k[a[c++]^x>>16&255]^e[a[c++]^x>>>24]^t[a[c++]]^L[a[c++]]^C[a[c++]]^w[a[c++]]^P[a[c++]]^A[a[c++]]^$[a[c++]]^E[a[c++]]^i[a[c++]]^n[a[c++]]^o[a[c++]]^r[a[c++]];for(v+=15;c<v;)x=x>>>8^r[(x^a[c++])&255];return~x},le=typeof CompressionStream<"u",Y=new TextEncoder,z=a=>a.reduce((l,r)=>l+r.length,0),q=Uint8Array;function ne(a){let l=new CompressionStream("gzip"),r=l.writable.getWriter(),o=l.readable.getReader();return r.write(a),r.close(),()=>o.read()}async function Z(a,l=!0,r=ne){let o=[],n=le&&l,i=a.length,E=a.map(f=>Y.encode(f.path)),$=a.map(({data:f})=>typeof f=="string"?Y.encode(f):f instanceof ArrayBuffer?new q(f):f),A=z($),P=z(E),w=i*46+P,C=A+i*30+P+w+22,L=new Date,t=new q(C),e=0;for(let f=0;f<i;f++){o[f]=e;let h=E[f],x=h.length,v=$[f],c=v.length,D=a[f].lastModified??L,X=(D.getSeconds()/2|0)+(D.getMinutes()<<5)+(D.getHours()<<11),R=D.getDate()+(D.getMonth()+1<<5)+(D.getFullYear()-1980<<9),s=0,g=!1;t[e++]=80,t[e++]=75,t[e++]=3,t[e++]=4,t[e++]=20,t[e++]=0,t[e++]=0,t[e++]=8;let y=e;t[e++]=t[e++]=0,t[e++]=X&255,t[e++]=X>>8,t[e++]=R&255,t[e++]=R>>8;let m=e;if(e+=8,t[e++]=c&255,t[e++]=c>>8&255,t[e++]=c>>16&255,t[e++]=c>>24,t[e++]=x&255,t[e++]=x>>8,t[e++]=t[e++]=0,t.set(h,e),e+=x,n){let d=e,u=r(v),p,T=0,S=0;e:{for(;;){let F=await u();if(F.done)throw new Error("Bad gzip data");if(p=F.value,T=S,S=T+p.length,T<=3&&S>3&&p[3-T]&30){g=!0;break e}if(S>=10){p=p.subarray(10-T);break}}for(;;){let F=e-d,M=p.length;if(F+M>=c+8){g=!0;break e}t.set(p,e),e+=M;let O=await u();if(O.done)break;p=O.value}}if(g)for(;;){let F=p.length,M=8-F,O=e;e=d;for(let U=0;U<8;U++)t[e++]=U<M?t[O-M+U]:p[F-8+U];let K=await u();if(K.done)break;p=K.value}e-=8,t[m++]=t[e++],t[m++]=t[e++],t[m++]=t[e++],t[m++]=t[e++],e-=4,g||(t[y]=8,s=e-d)}if((!n||g)&&(t.set(v,e),e+=c,s=c),!n){let d=re(v);t[m++]=d&255,t[m++]=d>>8&255,t[m++]=d>>16&255,t[m++]=d>>24}t[m++]=s&255,t[m++]=s>>8&255,t[m++]=s>>16&255,t[m++]=s>>24}let k=e;for(let f=0;f<i;f++){let h=o[f],x=E[f],v=x.length;t[e++]=80,t[e++]=75,t[e++]=1,t[e++]=2,t[e++]=20,t[e++]=0,t[e++]=20,t[e++]=0,t.set(t.subarray(h+6,h+30),e),e+=24,t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=t[e++]=0,t[e++]=h&255,t[e++]=h>>8&255,t[e++]=h>>16&255,t[e++]=h>>24,t.set(x,e),e+=v}return t[e++]=80,t[e++]=75,t[e++]=5,t[e++]=6,t[e++]=t[e++]=t[e++]=t[e++]=0,t[e++]=i&255,t[e++]=i>>8,t[e++]=i&255,t[e++]=i>>8,t[e++]=w&255,t[e++]=w>>8&255,t[e++]=w>>16&255,t[e++]=w>>24,t[e++]=k&255,t[e++]=k>>8&255,t[e++]=k>>16&255,t[e++]=k>>24,t[e++]=t[e++]=0,t.subarray(0,e)}var ie={"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"},b=a=>a.replace(/[<>&'"]/g,l=>ie[l]),ce=a=>{let l="";for(;;){let r=a%26;if(l=String.fromCharCode(65+r)+l,a=(a-r)/26-1,a<0)return l}},N=(a,l)=>`${ce(a)}${l+1}`,pe=Date.UTC(1899,11,31)/1e3/3600/24,_=(a,l=!1)=>{let r=a.getTime()/1e3/3600/24-pe;if(!(r<0)&&!(r<1&&!l))return r>=60&&(r+=1),r};var H=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />
   <Default Extension="xml" ContentType="application/xml" />
@@ -337,26 +337,26 @@ var W,se=()=>{let a=Int32Array,s=new a(256),m=new a(4096),o,l,n;for(l=0;l<256;l+
     Target="worksheets/sheet1.xml" />
 </Relationships>`;var Q=({company:a})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">
-  <Company>${T(a)}</Company>
-</Properties>`;var ee=({title:a,description:s,creator:m,creationDate:o})=>{let l=o.toISOString();return`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  <Company>${b(a)}</Company>
+</Properties>`;var ee=({title:a,description:l,creator:r,creationDate:o})=>{let n=o.toISOString();return`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cp:coreProperties
   xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:dcterms="http://purl.org/dc/terms/"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <dc:title>${T(a)}</dc:title>
-  <dc:description>${T(s)}</dc:description>
-  <dc:creator>${T(m)}</dc:creator>
-  <cp:lastModifiedBy>${T(m)}</cp:lastModifiedBy>
-  <dcterms:created xsi:type="dcterms:W3CDTF">${l}</dcterms:created>
-  <dcterms:modified xsi:type="dcterms:W3CDTF">${l}</dcterms:modified>
+  <dc:title>${b(a)}</dc:title>
+  <dc:description>${b(l)}</dc:description>
+  <dc:creator>${b(r)}</dc:creator>
+  <cp:lastModifiedBy>${b(r)}</cp:lastModifiedBy>
+  <dcterms:created xsi:type="dcterms:W3CDTF">${n}</dcterms:created>
+  <dcterms:modified xsi:type="dcterms:W3CDTF">${n}</dcterms:modified>
 </cp:coreProperties>`};var te=({sheetName:a})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <fileVersion appName="xl" lastEdited="7" lowestEdited="7" rupBuild="10211" />
   <workbookPr defaultThemeVersion="166925" />
   <sheets>
-    <sheet name="${T(a)}" sheetId="1" r:id="rId1" />
+    <sheet name="${b(a)}" sheetId="1" r:id="rId1" />
   </sheets>
   <calcPr calcId="181029" />
 </workbook>`;var ae=({wrapText:a})=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -436,10 +436,10 @@ var W,se=()=>{let a=Int32Array,s=new a(256),m=new a(4096),o,l,n;for(l=0;l<256;l+
       <x15:timelineStyles defaultTimelineStyle="TimeSlicerStyleLight1" />
     </ext>
   </extLst>
-</styleSheet>`;var ye=(n=>(n[n.Number=0]="Number",n[n.String=1]="String",n[n.DateTime=2]="DateTime",n[n.Date=3]="Date",n[n.Time=4]="Time",n))(ye||{}),ge={4:!0,3:!0,2:!0},xe={4:10,3:12,2:20},oe=6,I=42,U=2,J=1.1,ue=Math.ceil(I/J)-U,Ce=I-U,Ge=({headings:a,types:s,data:m,wrapText:o,freeze:l,autoFilter:n,creator:E,title:$,description:A,sheetName:P,company:w})=>{let C=a.length;if(C!==s.length||C!==m[0].length)throw new Error("Number of headings, types and data columns must match");let L=m.length,t=new Date,e=new Map,k=0,f=0,h=[],x=U+(n?2:0);for(let r=0;r<C;r++){let g=a[r].length*J+x;h[r]=g<oe?oe:g>I?I:g}for(let r=0;r<C;r++){if(h[r]>=I)continue;let y=s[r],g=xe[y];if(g!==void 0){h[r]<g&&(h[r]=g);continue}if(y===1){let p=0;for(let u=0;u<L;u++){let c=m[u][r];if(c==null)continue;c=String(c);let b=-1,S,F=c.length;for(;;){S=c.indexOf(`
-`,b+1),S===-1&&(S=F);let M=S-b;if(M>p&&(p=M),S===F)break;b=S}if(p>=ue)break}let d=p*J+U;h[r]<d&&(h[r]=d>I?I:d)}else if(y===0){let p=0;for(let u=0;u<L;u++){let c=m[u][r];if(c==null)continue;c=String(c);let b=c.length;if(b>p&&(p=b),p>=Ce)break}let d=p+U;h[r]<d&&(h[r]=d>I?I:d)}}let v=`<cols>${h.map((r,y)=>`<col min="${y+1}" max="${y+1}" width="${Math.ceil(r)}" bestFit="1" customWidth="1" />`).join("")}</cols>`,i=`<row r="1" spans="1:${C}">${a.map((r,y)=>`<c r="${N(y,0)}" t="inlineStr" s="1"><is><t>${T(r)}</t></is></c>`).join("")}</row>`,D=`${m.map((r,y)=>`<row r="${y+2}" spans="1:${C}">${r.map((g,p)=>{if(g==null)return"";let d=s[p],u;if(d in ge&&(u=d===4?4:d===3?3:2,g instanceof Date&&(g=_(g)??g),typeof g=="string"&&(d=1)),d===1){k++;let c=e.get(g);return c===void 0&&(c=f,e.set(g,c),f++),`<c r="${N(p,y+1)}" t="s"><v>${c}</v></c>`}return`<c r="${N(p,y+1)}"${u?` s="${u}"`:""}><v>${g}</v></c>`}).join("")}</row>`).join("")}`,X=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+</styleSheet>`;var ye=(i=>(i[i.Number=0]="Number",i[i.String=1]="String",i[i.DateTime=2]="DateTime",i[i.Date=3]="Date",i[i.Time=4]="Time",i))(ye||{}),ge={4:!0,3:!0,2:!0},xe={4:10,3:12,2:20},oe=6,I=42,B=2,J=1.1,ue=Math.ceil(I/J)-B,Ce=I-B,Ge=({headings:a,types:l,data:r,wrapText:o,freeze:n,autoFilter:i,creator:E,title:$,description:A,sheetName:P,company:w})=>{let C=a.length;if(C!==l.length||C!==r[0].length)throw new Error("Number of headings, types and data columns must match");let L=r.length,t=new Date,e=new Map,k=0,f=0,h=[],x=B+(i?2:0);for(let s=0;s<C;s++){let y=a[s].length*J+x;h[s]=y<oe?oe:y>I?I:y}for(let s=0;s<C;s++){if(h[s]>=I)continue;let g=l[s],y=xe[g];if(y!==void 0){h[s]<y&&(h[s]=y);continue}if(g===1){let m=0;for(let u=0;u<L;u++){let p=r[u][s];if(p==null)continue;p=String(p);let T=-1,S,F=p.length;for(;;){S=p.indexOf(`
+`,T+1),S===-1&&(S=F);let M=S-T;if(M>m&&(m=M),S===F)break;T=S}if(m>=ue)break}let d=m*J+B;h[s]<d&&(h[s]=d>I?I:d)}else if(g===0){let m=0;for(let u=0;u<L;u++){let p=r[u][s];if(p==null)continue;p=String(p);let T=p.length;if(T>m&&(m=T),m>=Ce)break}let d=m+B;h[s]<d&&(h[s]=d>I?I:d)}}let v=`<cols>${h.map((s,g)=>`<col min="${g+1}" max="${g+1}" width="${Math.ceil(s)}" bestFit="1" customWidth="1" />`).join("")}</cols>`,c=`<row r="1" spans="1:${C}">${a.map((s,g)=>`<c r="${N(g,0)}" t="inlineStr" s="1"><is><t>${b(s)}</t></is></c>`).join("")}</row>`,D=`${r.map((s,g)=>`<row r="${g+2}" spans="1:${C}">${s.map((y,m)=>{if(y==null)return"";let d=l[m],u;if(d in ge&&(u=d===4?4:d===3?3:2,y instanceof Date&&(d===4&&y.setUTCFullYear(1899,11,31),y=_(y,d===4)??y.toISOString()),typeof y=="string"&&(d=1)),d===1){k++;let p=e.get(y);return p===void 0&&(p=f,e.set(y,p),f++),`<c r="${N(m,g+1)}" t="s"><v>${p}</v></c>`}return`<c r="${N(m,g+1)}"${u?` s="${u}"`:""}><v>${y}</v></c>`}).join("")}</row>`).join("")}`,X=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="${k}" uniqueCount="${f}">
-${[...e].map(([r])=>`<si><t>${T(r)}</t></si>`).join("")}
+${[...e].map(([s])=>`<si><t>${b(s)}</t></si>`).join("")}
 </sst>`,R=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet 
   xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -450,16 +450,16 @@ ${[...e].map(([r])=>`<si><t>${T(r)}</t></si>`).join("")}
   <dimension ref="A1:${N(C-1,L)}" />
   <sheetViews>
     <sheetView tabSelected="1" workbookViewId="0">
-      ${l?'<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen" />':""}
-      <selection${l?' pane="bottomLeft"':""} activeCell="A2" sqref="A2" />
+      ${n?'<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen" />':""}
+      <selection${n?' pane="bottomLeft"':""} activeCell="A2" sqref="A2" />
     </sheetView>
   </sheetViews>
   <sheetFormatPr baseColWidth="12" defaultRowHeight="16" />
 ${v}
   <sheetData>
-${i}
+${c}
 ${D}
   </sheetData>
-  ${n?`<autoFilter ref="A1:${N(C-1,0)}" xr:uid="{3${crypto.randomUUID()}}" />`:""}
+  ${i?`<autoFilter ref="A1:${N(C-1,0)}" xr:uid="{3${crypto.randomUUID()}}" />`:""}
   <pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3" />
 </worksheet>`;return Z([{path:"[Content_Types].xml",data:H},{path:"_rels/.rels",data:j},{path:"xl/_rels/workbook.xml.rels",data:G},{path:"xl/workbook.xml",data:te({sheetName:P})},{path:"xl/styles.xml",data:ae({wrapText:o})},{path:"xl/theme/theme1.xml",data:V},{path:"xl/sharedStrings.xml",data:X},{path:"xl/worksheets/sheet1.xml",data:R},{path:"docProps/core.xml",data:ee({title:$,description:A,creator:E,creationDate:t})},{path:"docProps/app.xml",data:Q({company:w})}])};export{ye as XlsxTypes,Ge as createXlsx};
