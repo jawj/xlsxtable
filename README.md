@@ -5,8 +5,9 @@ A small, simple library to create nice `.xlsx` Excel files from tabular data, wh
 * Emboldens and (optionally) freezes and autofilters the headings
 * Sets reasonable column widths
 * Converts dates and times to native Excel format (roughly: floating-point days since 1 Jan 1900)
+* Works everywhere, including Node and browsers
 
-The only runtime dependency is [littlezipper](https://github.com/jawj/littlezipper) (which is by the same author, tiny, and has no runtime dependencies of its own).
+Under 7KB gzipped. The only runtime dependency is [littlezipper](https://github.com/jawj/littlezipper) (which is by the same author, tiny, and has no runtime dependencies of its own).
 
 ## How to say _xlsxtable_
 
@@ -24,6 +25,8 @@ The library supports Excel numbers, strings, dates/times, and empty cells.
 Excel has no concept of time zones, so the date and time types have local and UTC variants. The local variants produce a date or time that's the same as the one displayed by `date.toString()` (minus the local timezone information). Alternatively, the UTC variants produce a date or time that's the same as the one displayed by `date.toISOString()` (minus the `Z` that says it's UTC).
 
 ## Example usage
+
+To write a file in Node:
 
 ```javascript
 import { createXlsx, XlsxTypes as Xl } from 'xlsxtable';
@@ -57,3 +60,21 @@ createXlsx({
 This produces [`my.xlsx`](my.xlsx):
 
 ![Screenshot](my.xlsx.png)
+
+To provide a download in browsers, something like this works nicely:
+
+```javascript
+const xlsx = await createXlsx(/* ... */);
+
+const url = URL.createObjectURL(new Blob([xlsx]));
+const link = document.createElement('a');
+link.style.display = 'none';
+document.body.appendChild(link);
+link.href = url;
+link.download = 'my.xlsx';
+link.click();
+setTimeout(() => {
+  URL.revokeObjectURL(url);
+  document.body.removeChild(link);
+}, 0);
+```
