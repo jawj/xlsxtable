@@ -78,3 +78,7 @@ setTimeout(() => {
   document.body.removeChild(link);
 }, 0);
 ```
+
+## License
+
+[MIT licensed](LICENSE).
