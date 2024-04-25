@@ -2,7 +2,7 @@
 
 A small, simple library to create nice `.xlsx` Excel files from tabular data, which:
 
-* Emboldens and (optionally) autofilters and freezes the headings
+* Emboldens and (optionally) freezes and autofilters the headings
 * Sets reasonable column widths
 * Converts dates and times to native Excel format (roughly: floating-point days since 1 Jan 1900)
 
@@ -18,8 +18,8 @@ The library supports Excel numbers, strings, dates/times, and empty cells.
 
 * `XlsxTypes.String` values will be coerced to `string`.
 * `XlsxTypes.Number` values must be provided as `number` or `string`.
-* `XlsxTypes.LocalDate`/`XlsxTypes.UTCDate`, `XlsxTypes.LocalTime`/`XlsxTypes.UTCTime` and `XlsxTypes.LocalDateTime`/`XlsxTypes.UTCDateTime` values should be provided as `Date` objects, or `string` as a fallback (e.g. if the date is infinite or otherwise unsupported).
-* `null` or `undefined` values result in an empty cell, no matter what types was specified for that column.
+* `XlsxTypes.LocalDate`/`XlsxTypes.UTCDate`, `XlsxTypes.LocalTime`/`XlsxTypes.UTCTime` and `XlsxTypes.LocalDateTime`/`XlsxTypes.UTCDateTime` values should be provided as `Date` objects, or `string` as a fallback (e.g. if the date is infinite or before 1900 or otherwise unsupported by Excel).
+* `null` or `undefined` values result in an empty cell, no matter what type was specified for that column.
 
 Excel has no concept of time zones, so the date and time types have local and UTC variants. The local variants produce a date or time that's the same as the one displayed by `date.toString()` (minus the local timezone information). Alternatively, the UTC variants produce a date or time that's the same as the one displayed by `date.toISOString()` (minus the `Z` that says it's UTC).
 
