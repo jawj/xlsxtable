@@ -6,36 +6,39 @@ A small, simple library to create nice `.xlsx` Excel files from tabular data, wh
 * Sets reasonable column widths
 * Converts dates and times to native Excel format (roughly: floating-point days since 1 Jan 1900)
 
-The only runtime dependency is [littlezipper](https://github.com/jawj/littlezipper) (which has no runtime dependencies of its own).
+The only runtime dependency is [littlezipper](https://github.com/jawj/littlezipper) (which is by the same author, tiny, and has no runtime dependencies of its own).
 
 ## How to say _xlsxtable_
 
-Pronunciation is as close as possible to 'vegetable' or 'Whitstable'. That is: _ex-el-ess-EX-ta-bl_.
+Pronunciation is as close as possible to 'vegetable' or 'Whitstable'. That is: _ex-el-ess-EX-tuh-bl_.
 
 ## Types
 
+The library supports Excel numbers, strings, dates/times, and empty cells.
+
 * `XlsxTypes.String` values will be coerced to `string`.
 * `XlsxTypes.Number` values must be provided as `number` or `string`.
-* `XlsxTypes.LocalDate`/`XlsxTypes.UTCDate`, `XlsxTypes.LocalTime`/`XlsxTypes.UTCTime` and `XlsxTypes.LocalDateTime`/`XlsxTypes.UTCDateTime` values should be provided as `Date` objects, with `string` as a fallback (e.g. if the date is infinite or otherwise unsupported).
-* `null` or `undefined` values result in an empty cell for all `XlsxTypes`.
+* `XlsxTypes.LocalDate`/`XlsxTypes.UTCDate`, `XlsxTypes.LocalTime`/`XlsxTypes.UTCTime` and `XlsxTypes.LocalDateTime`/`XlsxTypes.UTCDateTime` values should be provided as `Date` objects, or `string` as a fallback (e.g. if the date is infinite or otherwise unsupported).
+* `null` or `undefined` values result in an empty cell, no matter what types was specified for that column.
+
+Excel has no concept of time zones, so the date and time types have local and UTC variants. The local variants produce a date or time that's the same as the one displayed by `date.toString()` (minus the local timezone information). Alternatively, the UTC variants produce a date or time that's the same as the one displayed by `date.toISOString()` (minus the `Z` that says it's UTC).
 
 ## Example usage
 
 ```javascript
-import { createXlsx, XlsxTypes } from 'xlsxtable';
+import { createXlsx, XlsxTypes as Xl } from 'xlsxtable';
 import { writeFileSync } from 'fs';
 
 const now = new Date();
 
 createXlsx({
   // sheet data
-  headings: ['id', 'name', 'dob', 'lastUpdated'],
-  types: [XlsxTypes.Number, XlsxTypes.String, XlsxTypes.LocalDate, XlsxTypes.LocalDateTime],
+  headings: ['id', 'name', 'dob', 'wake_up', 'lastUpdated'],
+  types: [Xl.Number, Xl.String, Xl.LocalDate, Xl.LocalTime, Xl.LocalDateTime],
   data: [
-    [1, 'Anna', new Date('1979-01-01'), now],
-    [2, 'Bryn', new Date('1979-01-02'), now],
-    [null, null, null, null],
-    [3, 'Chip', new Date('1979-01-03'), now],    
+    [1, 'Anna', new Date('1979-01-01'), new Date(0, 0, 0, 7), now],
+    [2, 'Bryn', new Date('1989-02-03'), new Date(0, 0, 0, 8), now],
+    [3, 'Chip', new Date('1999-03-04'), new Date(0, 0, 0, 9), now],
   ],
   // options
   sheetName: 'Sheet 1',  // shown on the tab at the bottom: limited character range allowed
@@ -50,3 +53,7 @@ createXlsx({
 })
   .then(xlsx => writeFileSync('/path/to/my.xlsx', xlsx));
 ```
+
+This produces [`my.xlsx`](my.xlsx):
+
+![Screenshot](my.xlsx.png)
