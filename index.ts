@@ -1,6 +1,6 @@
 
 import { createZip } from 'littlezipper';
-import { xmlesc, cellRef, excelDate } from './utils';
+import { xmlesc, cellRef, excelDate, ymdLocal, ymdUTC, longestLineLengthInString } from './utils';
 import { contentTypesXml, relsXml, theme1Xml, workbookXmlRels } from './xlsx-static';
 import appXml from './xlsx-dynamic/appxml';
 import coreXml from './xlsx-dynamic/corexml';
@@ -19,10 +19,13 @@ export enum XlsxTypes {
   UTCDateTime,
 }
 
-interface XlsxConfig {
+interface XlsxRequiredConfig {
   headings: string[];
   types: XlsxTypes[];
   data: any[][];
+}
+
+interface XlsxOptionalConfig {
   wrapText: boolean,
   freeze: boolean;
   autoFilter: boolean;
@@ -31,27 +34,41 @@ interface XlsxConfig {
   title: string;
   description: string;
   company: string;
+  minColWidth: number; // includes padWidth
+  maxColWidth: number;  // includes padWidth
+  padWidth: number;
+  stringCharWidth: number;
 }
 
-const typeWidths = {  // these include padWidth
-  [XlsxTypes.UTCDate]: 12,
-  [XlsxTypes.UTCTime]: 10,
-  [XlsxTypes.UTCDateTime]: 20,
-  [XlsxTypes.LocalDate]: 12,
-  [XlsxTypes.LocalTime]: 10,
-  [XlsxTypes.LocalDateTime]: 20,
-}
+interface XlsxConfig extends XlsxRequiredConfig, Partial<XlsxOptionalConfig> { }
 
-const minColWidth = 6; // includes padWidth
-const maxColWidth = 42;  // includes padWidth
-const padWidth = 2;
-const stringCharWidth = 1.1;  // all 'm's would be about 1.55, so this doesn't guarantee no wrapping
-const maxColStringChars = Math.ceil(maxColWidth / stringCharWidth) - padWidth;
-const maxColNumberChars = maxColWidth - padWidth;
+const defaultConfig: XlsxOptionalConfig = {
+  wrapText: true,
+  freeze: true,
+  autoFilter: true,
+  sheetName: 'Sheet 1',
+  creator: 'xlsxtable',
+  title: '',
+  description: '',
+  company: '',
+  minColWidth: 5, // includes padWidth
+  maxColWidth: 50,  // includes padWidth
+  padWidth: 2,  // allow this many characters at left or right of cell
+  stringCharWidth: 1.1,  // all 'm's would be about 1.55, so this doesn't guarantee no wrapping
+};
 
-export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter, creator, title, description, sheetName, company }: XlsxConfig) => {
+export const createXlsx = (config: XlsxConfig) => {
+  const {
+    headings, types, data,
+    wrapText, freeze, autoFilter,
+    creator, title, description, sheetName, company,
+    minColWidth, maxColWidth, padWidth, stringCharWidth,
+  } = { ...defaultConfig, ...config };
+
   const cols = headings.length;
-  if (cols !== types.length || cols !== data[0].length) throw new Error('Number of headings, types and data columns must match');
+  if (cols !== types.length || cols !== data[0].length) {
+    throw new Error(`Number of headings (${cols}), types (${types.length}) and data columns (first row: ${data[0].length}) must be the same`);
+  }
 
   const rows = data.length;
   const creationDate = new Date();
@@ -62,11 +79,22 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
 
   const colWidths = [];
 
-  // start with heading lengths, clamped to min and max (we assume no embedded newlines)
-  const headingPadWidth = padWidth + (autoFilter ? 2 : 0);
+  const typeWidths = {
+    [XlsxTypes.UTCDate]: 10 + padWidth,
+    [XlsxTypes.UTCTime]: 8 + padWidth,
+    [XlsxTypes.UTCDateTime]: 18 + padWidth,
+    [XlsxTypes.LocalDate]: 10 + padWidth,
+    [XlsxTypes.LocalTime]: 8 + padWidth,
+    [XlsxTypes.LocalDateTime]: 18 + padWidth,
+  }
+
+  // start with heading lengths, clamped to min and max
+  const headingPadWidth = padWidth + (autoFilter ? 2 : 0);  // extra space to allow for autofilter controls
+  const maxHeaderStringChars = Math.ceil(maxColWidth / stringCharWidth) - headingPadWidth;
   for (let colIndex = 0; colIndex < cols; colIndex++) {
     const heading = headings[colIndex];
-    const headingWidth = heading.length * stringCharWidth + headingPadWidth;
+    const longestLineLength = longestLineLengthInString(heading, maxHeaderStringChars);
+    const headingWidth = longestLineLength * stringCharWidth + headingPadWidth;
     colWidths[colIndex] =
       headingWidth < minColWidth ? minColWidth :
         headingWidth > maxColWidth ? maxColWidth :
@@ -74,6 +102,9 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
   }
 
   // update for data rows
+  const maxColStringChars = Math.ceil(maxColWidth / stringCharWidth) - padWidth;
+  const maxColNumberChars = maxColWidth - padWidth;
+
   for (let colIndex = 0; colIndex < cols; colIndex++) {
     // if already at max width from column name, skip
     if (colWidths[colIndex] >= maxColWidth) continue;
@@ -93,17 +124,7 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
         let cell = data[rowIndex][colIndex];
         if (cell == null /* or undefined */) continue;
         cell = String(cell);
-        let lastNewlineIndex = -1;
-        let newlineIndex;
-        let cellChars = cell.length;
-        for (; ;) {
-          newlineIndex = cell.indexOf('\n', lastNewlineIndex + 1);
-          if (newlineIndex === -1) newlineIndex = cellChars;
-          const lineLength = newlineIndex - lastNewlineIndex;
-          if (lineLength > longestLineLength) longestLineLength = lineLength;
-          if (newlineIndex === cellChars) break;
-          lastNewlineIndex = newlineIndex;
-        }
+        longestLineLength = longestLineLengthInString(cell, maxColStringChars);
         if (longestLineLength >= maxColStringChars) break;
       }
       const colWidth = longestLineLength * stringCharWidth + padWidth;
@@ -137,6 +158,7 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
   const rowsXml = `${data.map((row, rowIndex) => `<row r="${rowIndex + 2}" spans="1:${cols}">${row.map(
     (cell, colIndex) => {
       if (cell == null /* or undefined */) return '';
+
       let type = types[colIndex];
       const isDateOrTime = type >= XlsxTypes.LocalDate;
 
@@ -144,13 +166,19 @@ export const createXlsx = ({ headings, types, data, wrapText, freeze, autoFilter
       if (isDateOrTime) {
         const isTime = type === XlsxTypes.UTCTime || type === XlsxTypes.LocalTime;
         const isDate = type === XlsxTypes.UTCDate || type === XlsxTypes.LocalDate;
+        const isDateTime = !isDate && !isTime;
         const isUTC = type >= XlsxTypes.UTCDate;
 
         styleIndex = isTime ? 4 : isDate ? 3 : 2;
 
-        if (cell instanceof Date) cell = excelDate(cell, isUTC, isTime)
-          ?? cell.toISOString();  // for invalid dates, fall back to a string
-        
+        if (cell instanceof Date) {
+          cell = excelDate(cell, isUTC, isTime) ??  // for invalid dates, fall back to a string
+            (isUTC ?
+              ymdUTC(cell, isDate || isDateTime, isTime || isDateTime) :
+              ymdLocal(cell, isDate || isDateTime, isTime || isDateTime)
+            );
+        }
+
         if (typeof cell === 'string') type = XlsxTypes.String;
       }
 

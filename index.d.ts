@@ -10,10 +10,13 @@ export enum XlsxTypes {
   UTCDateTime,
 }
 
-export interface XlsxConfig {
+interface XlsxRequiredConfig {
   headings: string[];
   types: XlsxTypes[];
   data: any[][];
+}
+
+interface XlsxOptionalConfig {
   wrapText: boolean,
   freeze: boolean;
   autoFilter: boolean;
@@ -22,6 +25,12 @@ export interface XlsxConfig {
   title: string;
   description: string;
   company: string;
+  minColWidth: number; // includes padWidth
+  maxColWidth: number;  // includes padWidth
+  padWidth: number;
+  stringCharWidth: number;
 }
+
+interface XlsxConfig extends XlsxRequiredConfig, Partial<XlsxOptionalConfig> { }
 
 export function createXlsx(config: XlsxConfig): Promise<Uint8Array>;

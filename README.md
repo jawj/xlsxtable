@@ -3,7 +3,7 @@
 A small, simple library to create nice `.xlsx` Excel files from tabular data, which:
 
 * Emboldens and (optionally) freezes and autofilters the headings
-* Sets reasonable column widths
+* Sets reasonable column widths based on content
 * Converts dates and times to native Excel format (roughly: floating-point days since 1 Jan 1900)
 * Works everywhere, including Node and browsers
 

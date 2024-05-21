@@ -1,6 +1,6 @@
 {
   "name": "xlsxtable",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Create nice Excel files from tabular data",
   "files": [
     "index.js",
@@ -15,19 +15,21 @@
   },
   "scripts": {
     "check": "tsc --noEmit",
-    "buildCjs": "esbuild index.ts --bundle --external:littlezip --format=cjs --minify --loader:.xml=text --outfile=index.js",
-    "buildEsm": "esbuild index.ts --bundle --external:littlezip --format=esm --minify --loader:.xml=text --outfile=index.mjs",
-    "build": "npm run check && npm run buildCjs && npm run buildEsm && cp index.d.ts index.d.mts"
+    "buildCjs": "esbuild index.ts --bundle --external:littlezip --format=cjs --minify --line-limit=100 --loader:.xml=text --outfile=index.js",
+    "buildEsm": "esbuild index.ts --bundle --external:littlezip --format=esm --minify --line-limit=100 --loader:.xml=text --outfile=index.mjs",
+    "build": "npm run check && npm run buildCjs && npm run buildEsm && cp index.d.ts index.d.mts",
+    "example": "npm run build && node example.mjs"
   },
   "keywords": [
     "xlsx",
+    "xls",
     "Excel",
-    "zip"
+    "tables"
   ],
   "author": "George MacKerron",
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.21.3",
     "typescript": "^5.4.2"
   },
   "repository": {
